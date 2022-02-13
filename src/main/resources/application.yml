@@ -1,0 +1,29 @@
+
+spring:
+  profiles:
+    active: local
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:tcp://localhost/~/project1
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        jdbc:
+          batch_size: 100
+
+
+server:
+  tomcat:
+    max-http-form-post-size: 5MB
+  servlet.session.timeout: 1800
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+
