@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<!--<head th:replace="fragments.html :: head"></head>-->
+<head th:replace="fragments.html :: head"></head>
 <body class="bg-light">
-<!--<div th:replace="fragments.html :: main-nav"></div>-->
+<div th:replace="fragments.html :: main-nav"></div>
 <section class="jumbotron text-center">
     <div class="container">
         <h1>스터디올래</h1>
@@ -15,12 +15,12 @@
         </p>
     </div>
 </section>
-<!--<div class="container">-->
-<!--    <div class="row justify-content-center pt-3">-->
-<!--        <div th:replace="fragments.html :: study-list (studyList=${studyList})"></div>-->
-<!--    </div>-->
-<!--</div>-->
-<!--<div th:replace="fragments.html :: footer"></div>-->
-<!--<div th:replace="fragments.html :: date-time"></div>-->
+<div class="container">
+    <div class="row justify-content-center pt-3">
+        <div th:replace="fragments.html :: study-list (studyList=${studyList})"></div>
+    </div>
+</div>
+<div th:replace="fragments.html :: footer"></div>
+<div th:replace="fragments.html :: date-time"></div>
 </body>
 </html>

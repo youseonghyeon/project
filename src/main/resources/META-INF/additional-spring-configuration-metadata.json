@@ -1,0 +1,8 @@
+{
+    "properties": [
+        {
+            "name": "app.host",
+            "type": "java.lang.String",
+            "description": "Description for app.host."
+    }
+] }
