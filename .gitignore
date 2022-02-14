@@ -38,3 +38,4 @@ out/
 
 ### NPM ###
 **/node_modules/
+**/node/
