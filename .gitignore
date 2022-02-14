@@ -37,4 +37,4 @@ out/
 .vscode/
 
 ### NPM ###
-resources/static/node_modules
+resources/static/node_modules/
