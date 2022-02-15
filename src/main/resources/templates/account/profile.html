@@ -14,6 +14,7 @@
                      th:src="${account.profileImage}"
                      width="125" height="125"/>
             </div>
+
             <div class="col-8">
                 <h1 class="display-4 " th:text="${account.nickname}">Whiteship</h1>
                 <p class="lead" th:if="${!#strings.isEmpty(account.bio)}" th:text="${account.bio}">bio</p>
