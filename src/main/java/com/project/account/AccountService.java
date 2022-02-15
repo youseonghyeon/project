@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -28,6 +29,11 @@ public class AccountService {
         newAccount.generateEmailCheckToken();
         sendSignUpConfirmEmail(newAccount);
         return newAccount;
+    }
+
+    public void resendConfirmEmail(Account account) {
+        sendSignUpConfirmEmail(account);
+        account.setEmailCheckTokenGeneratedAt(LocalDateTime.now());
     }
 
     private Account saveNewAccount(SignUpForm signUpForm) {
