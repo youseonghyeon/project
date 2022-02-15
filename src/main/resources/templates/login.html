@@ -4,11 +4,13 @@
 <head th:replace="fragments.html :: head"></head>
 <body class="bg-light">
     <div th:replace="fragments.html :: main-nav"></div>
+
     <div class="container">
         <div class="py-5 text-center">
             <p class="lead">스터디올래</p>
             <h2>로그인</h2>
         </div>
+
         <div class="row justify-content-center">
             <div th:if="${param.error}" class="alert alert-danger" role="alert">
                 <p>이메일(또는 닉네임)과 패스워드가 정확하지 않습니다.</p>
