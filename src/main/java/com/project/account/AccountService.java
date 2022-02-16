@@ -1,8 +1,10 @@
 package com.project.account;
 
 import com.project.domain.Account;
+import com.project.settings.PasswordForm;
 import com.project.settings.Profile;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,8 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -97,7 +99,15 @@ public class AccountService implements UserDetailsService {
         account.setOccupation(profile.getOccupation());
         account.setLocation(profile.getLocation());
         account.setBio(profile.getBio());
-        // TODO 프로필 이미지
+        account.setProfileImage(profile.getProfileImage());
         accountRepository.save(account);
     }
+
+    @Transactional
+    public void updatePassword(Account account, PasswordForm password) {
+        account.setPassword(passwordEncoder.encode(password.getNewPassword()));
+        accountRepository.save(account);
+    }
+
+
 }
