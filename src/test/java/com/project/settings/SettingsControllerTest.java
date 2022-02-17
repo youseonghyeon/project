@@ -19,6 +19,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 
 @SpringBootTest
 @Transactional
@@ -43,7 +44,7 @@ class SettingsControllerTest {
     @DisplayName("프로필 수정 폼")
     @Test
     void updateProfileForm() throws Exception {
-        mockMvc.perform(get(SettingsController.SETTINGS_PROFILE_URL))
+        mockMvc.perform(get(SettingsController.PROFILE_URL))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("account"))
                 .andExpect(model().attributeExists("profile"));
@@ -54,11 +55,11 @@ class SettingsControllerTest {
     @Test
     void updateProfile() throws Exception {
         String bio = "짧은 소개를 수정하는 경우.";
-        mockMvc.perform(post(SettingsController.SETTINGS_PROFILE_URL)
+        mockMvc.perform(post(SettingsController.PROFILE_URL)
                         .param("bio", bio)
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl(SettingsController.SETTINGS_PROFILE_URL))
+                .andExpect(redirectedUrl(SettingsController.PROFILE_URL))
                 .andExpect(flash().attributeExists("message"));
 
         Account account = accountRepository.findByNickname("test");
@@ -70,11 +71,11 @@ class SettingsControllerTest {
     @Test
     void updateProfile_with_error() throws Exception {
         String bio = "길게 소개를 수정하는 경우. 길게 소개를 수정하는 경우. 길게 소개를 수정하는 경우. 길게 소개를 수정하는 경우.";
-        mockMvc.perform(post(SettingsController.SETTINGS_PROFILE_URL)
+        mockMvc.perform(post(SettingsController.PROFILE_URL)
                         .param("bio", bio)
                         .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(view().name(SettingsController.SETTINGS_PROFILE_VIEW_NAME))
+                .andExpect(view().name(SettingsController.PROFILE_VIEW_NAME))
                 .andExpect(model().attributeExists("account"))
                 .andExpect(model().attributeExists("profile"))
                 .andExpect(model().hasErrors());
@@ -87,7 +88,7 @@ class SettingsControllerTest {
     @DisplayName("비밀번호 수정 폼")
     @Test
     void updatePasswordForm() throws Exception {
-        mockMvc.perform(get(SettingsController.SETTINGS_PASSWORD_URL))
+        mockMvc.perform(get(SettingsController.PASSWORD_URL))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("account"))
                 .andExpect(model().attributeExists("passwordForm"));
@@ -98,12 +99,12 @@ class SettingsControllerTest {
     @Test
     void updatePassword() throws Exception {
         String pw = "ag8dfgs8twg823";
-        mockMvc.perform(post(SettingsController.SETTINGS_PASSWORD_URL)
+        mockMvc.perform(post(SettingsController.PASSWORD_URL)
                         .param("newPassword", pw)
                         .param("newPasswordConfirm", pw)
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl(SettingsController.SETTINGS_PASSWORD_URL))
+                .andExpect(redirectedUrl(SettingsController.PASSWORD_URL))
                 .andExpect(flash().attributeExists("message"));
 
         Account account = accountRepository.findByNickname("test");
@@ -115,14 +116,44 @@ class SettingsControllerTest {
     @Test
     void updatePassword_withError() throws Exception {
         String pw = "ag8dfgs8twg823";
-        mockMvc.perform(post(SettingsController.SETTINGS_PASSWORD_URL)
+        mockMvc.perform(post(SettingsController.PASSWORD_URL)
                         .param("newPassword", pw)
                         .param("newPasswordConfirm", "0000000000")
                         .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(view().name(SettingsController.SETTINGS_PASSWORD_VIEW_NAME))
+                .andExpect(view().name(SettingsController.PASSWORD_VIEW_NAME))
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("passwordForm"))
                 .andExpect(model().attributeExists("account"));
+    }
+
+    @WithAccount("test")
+    @DisplayName("알림 수정 폼")
+    @Test
+    void updateNotificationsForm() throws Exception {
+        mockMvc.perform(get(SettingsController.NOTIFICATIONS_URL))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("notifications"));
+    }
+
+    @WithAccount("test")
+    @DisplayName("알림 수정하기 - 성공")
+    @Test
+    void updateNotifications() throws Exception {
+        mockMvc.perform(post(SettingsController.NOTIFICATIONS_URL)
+                        .param("studyCreatedByEmail", "false")
+                        .param("studyCreatedByWeb", "false")
+                        .param("studyEnrollmentResultByEmail", "false")
+                        .param("studyEnrollmentResultByWeb", "true")
+                        .param("studyUpdatedByEmail", "false")
+                        .param("studyUpdatedByWeb", "false")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(SettingsController.NOTIFICATIONS_URL))
+                .andExpect(flash().attributeExists("message"));
+
+        Account account = accountRepository.findByNickname("test");
+        assertTrue(account.isStudyEnrollmentResultByWeb());
     }
 }
