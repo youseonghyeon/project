@@ -1,6 +1,7 @@
 package com.project.account;
 
 import com.project.domain.Account;
+import com.project.domain.Tag;
 import com.project.form.SignUpForm;
 import com.project.settings.form.NicknameForm;
 import com.project.settings.form.Notifications;
@@ -23,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -37,26 +40,14 @@ public class AccountService implements UserDetailsService {
 
     public Account processNewAccount(SignUpForm signUpForm) {
         Account newAccount = saveNewAccount(signUpForm);
-        newAccount.generateEmailCheckToken();
         sendSignUpConfirmEmail(newAccount);
         return newAccount;
     }
 
-    public void resendConfirmEmail(Account account) {
-        sendSignUpConfirmEmail(account);
-        account.setEmailCheckTokenGeneratedAt(LocalDateTime.now());
-    }
-
     private Account saveNewAccount(SignUpForm signUpForm) {
-        Account account = Account.builder()
-                .email(signUpForm.getEmail())
-                .nickname(signUpForm.getNickname())
-                .password(passwordEncoder.encode(signUpForm.getPassword()))
-//                .password(signUpForm.getPassword())
-                .studyCreatedByWeb(true)
-                .studyEnrollmentResultByWeb(true)
-                .studyUpdatedByWeb(true)
-                .build();
+        signUpForm.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
+        Account account = modelMapper.map(signUpForm, Account.class);
+        account.generateEmailCheckToken();
         return accountRepository.save(account);
     }
 
@@ -127,13 +118,26 @@ public class AccountService implements UserDetailsService {
     }
 
 
-
-
     public Account getAccount(String nickname) {
         Account account = accountRepository.findByNickname(nickname);
         if (account == null) {
             throw new IllegalArgumentException(nickname + "에 해당하는 사용자가 없습니다.");
         }
         return account;
+    }
+
+    public void addTag(Account account, Tag tag) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        byId.ifPresent(a -> a.getTags().add(tag));
+    }
+
+    public Set<Tag> getTags(Account account) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        return byId.orElseThrow().getTags();
+    }
+
+    public void removeTag(Account account, Tag tag) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        byId.ifPresent(a -> a.getTags().remove(tag));
     }
 }
