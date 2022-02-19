@@ -6,10 +6,12 @@ import com.project.account.AccountService;
 import com.project.account.CurrentUser;
 import com.project.domain.Account;
 import com.project.domain.Tag;
+import com.project.domain.Zone;
 import com.project.settings.form.*;
 import com.project.settings.validator.NicknameValidator;
 import com.project.settings.validator.PasswordFormValidator;
 import com.project.tag.TagRepository;
+import com.project.zone.ZoneRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -55,11 +57,15 @@ public class SettingsController {
     static final String TAGS_VIEW_NAME = "settings/tags";
     static final String TAGS_URL = "/" + TAGS_VIEW_NAME;
 
+    static final String ZONES_VIEW_NAME = "settings/zones";
+    static final String ZONES_URL = "/" + TAGS_VIEW_NAME;
+
     private final AccountService accountService;
     private final ModelMapper modelMapper;
     private final NicknameValidator nicknameValidator;
     private final TagRepository tagRepository;
     private final ObjectMapper objectMapper;
+    private final ZoneRepository zoneRepository;
 
     @GetMapping(PROFILE_URL)
     public String profileUpdateForm(@CurrentUser Account account, Model model) {
@@ -169,7 +175,7 @@ public class SettingsController {
         return TAGS_VIEW_NAME;
     }
 
-    @PostMapping("/settings/tags/add")
+    @PostMapping(TAGS_URL + "/add")
     @ResponseBody
     public ResponseEntity updateTags(
             @CurrentUser Account account,
@@ -183,7 +189,7 @@ public class SettingsController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/settings/tags/remove")
+    @PostMapping(TAGS_URL + "/remove")
     @ResponseBody
     public ResponseEntity deleteTag(
             @CurrentUser Account account,
@@ -195,5 +201,16 @@ public class SettingsController {
         }
         accountService.removeTag(account, tag);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(ZONES_URL)
+    public String updateZonesForm(@CurrentUser Account account, Model model) throws JsonProcessingException {
+        model.addAttribute(account);
+        Set<Zone> zones = accountService.getZones(account);
+        model.addAttribute("zones", zones.stream().map(Zone::getCity).collect(Collectors.toList()));
+
+        List<String> whitelist = zoneRepository.findAll().stream().map(Zone::getCity).collect(Collectors.toList());
+        model.addAttribute("whitelist", objectMapper.writeValueAsString(whitelist));
+        return ZONES_VIEW_NAME;
     }
 }

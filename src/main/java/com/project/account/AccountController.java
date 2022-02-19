@@ -1,7 +1,7 @@
 package com.project.account;
 
 import com.project.domain.Account;
-import com.project.form.SignUpForm;
+import com.project.account.form.SignUpForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

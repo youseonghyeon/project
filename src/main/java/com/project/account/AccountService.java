@@ -2,7 +2,8 @@ package com.project.account;
 
 import com.project.domain.Account;
 import com.project.domain.Tag;
-import com.project.form.SignUpForm;
+import com.project.account.form.SignUpForm;
+import com.project.domain.Zone;
 import com.project.settings.form.NicknameForm;
 import com.project.settings.form.Notifications;
 import com.project.settings.form.PasswordForm;
@@ -22,7 +23,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -139,5 +139,10 @@ public class AccountService implements UserDetailsService {
     public void removeTag(Account account, Tag tag) {
         Optional<Account> byId = accountRepository.findById(account.getId());
         byId.ifPresent(a -> a.getTags().remove(tag));
+    }
+
+    public Set<Zone> getZones(Account account) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        return byId.orElseThrow().getZones();
     }
 }
