@@ -58,7 +58,7 @@ public class SettingsController {
     static final String TAGS_URL = "/" + TAGS_VIEW_NAME;
 
     static final String ZONES_VIEW_NAME = "settings/zones";
-    static final String ZONES_URL = "/" + TAGS_VIEW_NAME;
+    static final String ZONES_URL = "/" + ZONES_VIEW_NAME;
 
     private final AccountService accountService;
     private final ModelMapper modelMapper;
@@ -206,11 +206,34 @@ public class SettingsController {
     @GetMapping(ZONES_URL)
     public String updateZonesForm(@CurrentUser Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
-        Set<Zone> zones = accountService.getZones(account);
-        model.addAttribute("zones", zones.stream().map(Zone::getCity).collect(Collectors.toList()));
 
-        List<String> whitelist = zoneRepository.findAll().stream().map(Zone::getCity).collect(Collectors.toList());
-        model.addAttribute("whitelist", objectMapper.writeValueAsString(whitelist));
+        Set<Zone> zones = accountService.getZones(account);
+        model.addAttribute("zones", zones.stream().map(Zone::toString).collect(Collectors.toList()));
+
+        List<String> allZones = zoneRepository.findAll().stream().map(Zone::toString).collect(Collectors.toList());
+        model.addAttribute("whitelist", objectMapper.writeValueAsString(allZones));
         return ZONES_VIEW_NAME;
+    }
+
+    @PostMapping(ZONES_URL + "/add")
+    @ResponseBody
+    public ResponseEntity addZones(@CurrentUser Account account, @RequestBody ZoneForm zoneForm) {
+        Zone zone = zoneRepository.findByCityAndProvince(zoneForm.getCityName(), zoneForm.getProvinceName());
+        if (zone == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        accountService.addZone(account, zone);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(ZONES_URL + "/remove")
+    @ResponseBody
+    public ResponseEntity removeZones(@CurrentUser Account account, @RequestBody ZoneForm zoneForm) {
+        Zone zone = zoneRepository.findByCityAndProvince(zoneForm.getCityName(), zoneForm.getProvinceName());
+        if (zone == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        accountService.removeZone(account, zone);
+        return ResponseEntity.ok().build();
     }
 }
