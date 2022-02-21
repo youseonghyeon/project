@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/testdb
+    username: testuser
+    password: testpass
+  jpa:
+    hibernate:
+      ddl-auto: update
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: epfzja1234@gmail.com
+    password: zehpnoaaalfvvedy
+    properties:
+      mail:
+        smtp:
+          auto: true
+          timeout: 5000
+          starttls.enable: true
