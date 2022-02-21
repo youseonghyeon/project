@@ -31,6 +31,7 @@ public class HtmlEmailService implements EmailService {
         } catch (MessagingException e) {
             log.error("failed to send email", e);
             throw new RuntimeException(e);
+            // TODO 사용자에게 메일이 전송되지 않았다는 것을 알리자
         }
     }
 }
