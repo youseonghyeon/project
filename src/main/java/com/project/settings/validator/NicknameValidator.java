@@ -1,6 +1,6 @@
 package com.project.settings.validator;
 
-import com.project.account.AccountRepository;
+import com.project.account.repository.AccountRepository;
 import com.project.domain.Account;
 import com.project.settings.form.NicknameForm;
 import lombok.RequiredArgsConstructor;

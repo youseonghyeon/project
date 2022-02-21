@@ -1,5 +1,7 @@
 package com.project.account;
 
+import com.project.account.repository.AccountRepository;
+import com.project.account.service.AccountService;
 import com.project.domain.Account;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,8 +30,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AccountControllerTest {
 
     @Autowired MockMvc mockMvc;
-    @Autowired AccountRepository accountRepository;
-    @Autowired AccountService accountService;
+    @Autowired
+    AccountRepository accountRepository;
+    @Autowired
+    AccountService accountService;
     @MockBean JavaMailSender javaMailSender;
 
     @DisplayName("인증 메일 확인 - 입력값 오류")

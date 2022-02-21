@@ -1,4 +1,4 @@
-package com.project.account;
+package com.project.account.util;
 
 import com.project.domain.Account;
 import lombok.Getter;

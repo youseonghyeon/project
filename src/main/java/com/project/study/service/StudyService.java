@@ -1,7 +1,8 @@
-package com.project.study;
+package com.project.study.service;
 
 import com.project.domain.Account;
 import com.project.domain.Study;
+import com.project.study.repository.StudyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

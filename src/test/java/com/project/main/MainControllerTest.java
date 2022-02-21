@@ -1,7 +1,7 @@
 package com.project.main;
 
-import com.project.account.AccountRepository;
-import com.project.account.AccountService;
+import com.project.account.repository.AccountRepository;
+import com.project.account.service.AccountService;
 import com.project.account.form.SignUpForm;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

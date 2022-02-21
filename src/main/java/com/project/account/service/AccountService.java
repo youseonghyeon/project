@@ -1,5 +1,7 @@
-package com.project.account;
+package com.project.account.service;
 
+import com.project.account.util.UserAccount;
+import com.project.account.repository.AccountRepository;
 import com.project.domain.Account;
 import com.project.domain.Tag;
 import com.project.account.form.SignUpForm;
