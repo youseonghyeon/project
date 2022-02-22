@@ -10,11 +10,11 @@ import com.project.domain.Zone;
 import com.project.settings.form.*;
 import com.project.settings.validator.NicknameValidator;
 import com.project.settings.validator.PasswordFormValidator;
-import com.project.tag.TagForm;
-import com.project.tag.TagRepository;
-import com.project.tag.TagService;
-import com.project.zone.ZoneForm;
-import com.project.zone.ZoneRepository;
+import com.project.tag.form.TagForm;
+import com.project.tag.repository.TagRepository;
+import com.project.tag.service.TagService;
+import com.project.zone.form.ZoneForm;
+import com.project.zone.repository.ZoneRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -46,22 +46,11 @@ public class SettingsController {
     }
 
     static final String PROFILE_VIEW = "settings/profile";
-    static final String PROFILE = "/profile";
-
     static final String PASSWORD_VIEW = "settings/password";
-    static final String PASSWORD = "/password";
-
     static final String NOTIFICATIONS_VIEW = "settings/notifications";
-    static final String NOTIFICATIONS = "/notifications";
-
     static final String ACCOUNT_VIEW = "settings/account";
-    static final String ACCOUNT = "/account";
-
     static final String TAGS_VIEW = "settings/tags";
-    static final String TAGS = "/tags";
-
     static final String ZONES_VIEW = "settings/zones";
-    static final String ZONES = "/zones";
 
     private final AccountService accountService;
     private final ModelMapper modelMapper;
@@ -71,15 +60,15 @@ public class SettingsController {
     private final TagService tagService;
     private final ZoneRepository zoneRepository;
 
-    @GetMapping(PROFILE)
+    /** Profile 폼/수정 */
+    @GetMapping("/profile")
     public String profileUpdateForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(modelMapper.map(account, Profile.class));
-
         return PROFILE_VIEW;
     }
 
-    @PostMapping(PROFILE)
+    @PostMapping("/profile")
     public String updateProfile(
             @CurrentAccount Account account,
             @ModelAttribute @Validated Profile profile,
@@ -93,17 +82,18 @@ public class SettingsController {
 
         accountService.updateProfile(account, profile);
         attributes.addFlashAttribute("message", "프로필을 수정했습니다.");
-        return "redirect:/settings" + PROFILE;
+        return "redirect:/settings/profile";
     }
 
-    @GetMapping(PASSWORD)
+    /** Password 폼/수정 */
+    @GetMapping("/password")
     public String passwordUpdateForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(new PasswordForm());
         return PASSWORD_VIEW;
     }
 
-    @PostMapping(PASSWORD)
+    @PostMapping("/password")
     public String passwordUpdate(
             @CurrentAccount Account account,
             @ModelAttribute @Validated PasswordForm password,
@@ -116,17 +106,18 @@ public class SettingsController {
         }
         accountService.updatePassword(account, password);
         attributes.addFlashAttribute("message", "비밀번호를 수정했습니다.");
-        return "redirect:/settings" + PASSWORD;
+        return "redirect:/settings/password";
     }
 
-    @GetMapping(NOTIFICATIONS)
+    /** Notification 폼/수정 */
+    @GetMapping("/notifications")
     public String notificationsUpdateForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(modelMapper.map(account, Notifications.class));
         return NOTIFICATIONS_VIEW;
     }
 
-    @PostMapping(NOTIFICATIONS)
+    @PostMapping("/notifications")
     public String notificationsUpdate(
             @CurrentAccount Account account,
             @ModelAttribute Notifications notifications,
@@ -140,17 +131,18 @@ public class SettingsController {
         accountService.updateNotifications(account, notifications);
         model.addAttribute(account);
         attributes.addFlashAttribute("message", "알림을 수정했습니다.");
-        return "redirect:/settings" + NOTIFICATIONS;
+        return "redirect:/settings/notifications";
     }
 
-    @GetMapping(ACCOUNT)
+    /** Account 폼/수정 */
+    @GetMapping("/account")
     public String accountUpdateForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(modelMapper.map(account, NicknameForm.class));
         return ACCOUNT_VIEW;
     }
 
-    @PostMapping(ACCOUNT)
+    @PostMapping("/account")
     public String accountUpdate(
             @CurrentAccount Account account,
             @ModelAttribute @Validated NicknameForm nicknameForm,
@@ -164,10 +156,11 @@ public class SettingsController {
         accountService.updateAccount(account, nicknameForm);
         model.addAttribute(account);
         attributes.addFlashAttribute("message", "변경 성공");
-        return "redirect:/settings" + ACCOUNT;
+        return "redirect:/settings/account";
     }
 
-    @GetMapping(TAGS)
+    /** Tag 폼/추가/삭제 */
+    @GetMapping("/tags")
     public String updateTagsForm(@CurrentAccount Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
         Set<Tag> tags = accountService.getTags(account);
@@ -179,7 +172,7 @@ public class SettingsController {
         return TAGS_VIEW;
     }
 
-    @PostMapping(TAGS + "/add")
+    @PostMapping("/tags/add")
     @ResponseBody
     public ResponseEntity updateTags(
             @CurrentAccount Account account,
@@ -189,7 +182,7 @@ public class SettingsController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(TAGS + "/remove")
+    @PostMapping("/tags/remove")
     @ResponseBody
     public ResponseEntity deleteTag(
             @CurrentAccount Account account,
@@ -203,7 +196,8 @@ public class SettingsController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(ZONES)
+    /** Zone 폼/추가/삭제 */
+    @GetMapping("/zones")
     public String updateZonesForm(@CurrentAccount Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
 
@@ -215,7 +209,7 @@ public class SettingsController {
         return ZONES_VIEW;
     }
 
-    @PostMapping(ZONES + "/add")
+    @PostMapping("/zones/add")
     @ResponseBody
     public ResponseEntity addZones(@CurrentAccount Account account, @RequestBody ZoneForm zoneForm) {
         Zone zone = zoneRepository.findByCityAndProvince(zoneForm.getCityName(), zoneForm.getProvinceName());
@@ -226,7 +220,7 @@ public class SettingsController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(ZONES + "/remove")
+    @PostMapping("/zones/remove")
     @ResponseBody
     public ResponseEntity removeZones(@CurrentAccount Account account, @RequestBody ZoneForm zoneForm) {
         Zone zone = zoneRepository.findByCityAndProvince(zoneForm.getCityName(), zoneForm.getProvinceName());

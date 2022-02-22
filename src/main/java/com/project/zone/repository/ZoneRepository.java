@@ -1,4 +1,4 @@
-package com.project.zone;
+package com.project.zone.repository;
 
 import com.project.domain.Zone;
 import org.springframework.data.jpa.repository.JpaRepository;

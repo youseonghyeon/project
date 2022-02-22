@@ -7,18 +7,18 @@ import com.project.domain.Account;
 import com.project.domain.Study;
 import com.project.domain.Tag;
 import com.project.domain.Zone;
-import com.project.tag.TagForm;
 import com.project.study.form.StudyDescriptionForm;
 import com.project.study.service.StudyService;
-import com.project.tag.TagRepository;
-import com.project.tag.TagService;
-import com.project.zone.ZoneForm;
-import com.project.zone.ZoneRepository;
-import com.project.zone.ZoneService;
+import com.project.tag.form.TagForm;
+import com.project.tag.repository.TagRepository;
+import com.project.tag.service.TagService;
+import com.project.zone.form.ZoneForm;
+import com.project.zone.repository.ZoneRepository;
+import com.project.zone.service.ZoneService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -31,6 +31,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Controller
 @RequestMapping("/study/{path}/settings")
 @RequiredArgsConstructor
@@ -44,6 +45,14 @@ public class StudySettingController {
     private final ZoneRepository zoneRepository;
     private final ZoneService zoneService;
 
+    // URL encoding
+    private String getPath(String path) {
+        return URLEncoder.encode(path, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * 스터디 설명 수정 폼/수정
+     */
     @GetMapping("/description")
     public String viewStudySetting(@CurrentAccount Account account, @PathVariable String path, Model model) {
         Study study = studyService.getStudyToUpdate(account, path);
@@ -70,10 +79,9 @@ public class StudySettingController {
         return "redirect:/study/" + getPath(path) + "/settings/description";
     }
 
-    private String getPath(String path) {
-        return URLEncoder.encode(path, StandardCharsets.UTF_8);
-    }
-
+    /**
+     * 배너 폼/수정/활성화/비활성화
+     */
     @GetMapping("/banner")
     public String bannerSettingForm(@CurrentAccount Account account, @PathVariable String path, Model model) {
         Study study = studyService.getStudyToUpdate(account, path);
@@ -105,6 +113,9 @@ public class StudySettingController {
         return "redirect:/study/" + getPath(path) + "/settings/banner";
     }
 
+    /**
+     * 태그 폼/추가/삭제
+     */
     @GetMapping("/tags")
     public String studyTagsForm(@CurrentAccount Account account, @PathVariable String path, Model model) throws JsonProcessingException {
         Study study = studyService.getStudyToUpdateTag(account, path);
@@ -139,7 +150,9 @@ public class StudySettingController {
         return ResponseEntity.ok().build();
     }
 
-
+    /**
+     * 지역 폼/추가/삭제
+     */
     @GetMapping("/zones")
     public String studyZonesForm(@CurrentAccount Account account, @PathVariable String path, Model model) throws JsonProcessingException {
         Study study = studyService.getStudyToUpdateZone(account, path);
@@ -178,6 +191,9 @@ public class StudySettingController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * 스터디 설정 폼/공개/종료/모집/모집중지/경로변경/이름변경/삭제
+     */
     @GetMapping("/study")
     public String studySettingForm(@CurrentAccount Account account, @PathVariable String path, Model model) {
         Study study = studyService.getStudyToUpdate(account, path);
@@ -187,7 +203,6 @@ public class StudySettingController {
         return "study/settings/study";
     }
 
-    // 스터디 공개
     @PostMapping("/study/publish")
     public String publishStudy(@CurrentAccount Account account, @PathVariable String path,
                                RedirectAttributes attributes) {
@@ -230,11 +245,8 @@ public class StudySettingController {
     }
 
     @PostMapping("/study/path")
-    public String editPath(@CurrentAccount Account account,
-                           @PathVariable String path,
-                           @RequestParam String newPath,
-                           Model model,
-                           RedirectAttributes attributes) {
+    public String editPath(@CurrentAccount Account account, @PathVariable String path,
+                           @RequestParam String newPath, Model model, RedirectAttributes attributes) {
         Study study = studyService.getStudyToUpdateStatus(account, path);
         if (!studyService.isValidPath(newPath)) {
             model.addAttribute(account);
@@ -250,10 +262,8 @@ public class StudySettingController {
     }
 
     @PostMapping("/study/title")
-    public String editTitle(@CurrentAccount Account account,
-                            @PathVariable String path,
-                            @RequestParam String newTitle,
-                            Model model,
+    public String editTitle(@CurrentAccount Account account, @PathVariable String path,
+                            @RequestParam String newTitle, Model model,
                             RedirectAttributes attributes) {
         Study study = studyService.getStudyToUpdateStatus(account, path);
         if (!studyService.isValidTitle(newTitle)) {
@@ -269,9 +279,7 @@ public class StudySettingController {
     }
 
     @PostMapping("/study/remove")
-    public String removeStudy(@CurrentAccount Account account,
-                              @PathVariable String path,
-                              Model model) {
+    public String removeStudy(@CurrentAccount Account account, @PathVariable String path) {
         Study study = studyService.getStudyToUpdateStatus(account, path);
         if (!studyService.isRemovable(study)) {
             throw new IllegalArgumentException("스터디를 삭제할 수 없습니다.");

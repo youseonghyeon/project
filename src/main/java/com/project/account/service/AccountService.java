@@ -77,7 +77,7 @@ public class AccountService implements UserDetailsService {
                 .message(message)
                 .build();
 
-        emailService.sendEmail(emailMessage);
+        emailService.send(emailMessage);
     }
 
     public void login(Account account) {
@@ -147,20 +147,22 @@ public class AccountService implements UserDetailsService {
         return account;
     }
 
-    public void addTag(Account account, Tag tag) {
-        Optional<Account> byId = accountRepository.findById(account.getId());
-        byId.ifPresent(a -> a.getTags().add(tag));
-    }
 
     public Set<Tag> getTags(Account account) {
         Optional<Account> byId = accountRepository.findById(account.getId());
         return byId.orElseThrow().getTags();
     }
 
+    public void addTag(Account account, Tag tag) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        byId.ifPresent(a -> a.getTags().add(tag));
+    }
+
     public void removeTag(Account account, Tag tag) {
         Optional<Account> byId = accountRepository.findById(account.getId());
         byId.ifPresent(a -> a.getTags().remove(tag));
     }
+
 
     public Set<Zone> getZones(Account account) {
         Optional<Account> byId = accountRepository.findById(account.getId());

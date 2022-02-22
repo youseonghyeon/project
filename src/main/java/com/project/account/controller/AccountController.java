@@ -29,6 +29,11 @@ public class AccountController {
         webDataBinder.addValidators(signUpFormValidator);
     }
 
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
     @GetMapping("/sign-up")
     public String signUpForm(Model model) {
         model.addAttribute(new SignUpForm());
@@ -40,7 +45,6 @@ public class AccountController {
         if (errors.hasErrors()) {
             return "account/sign-up";
         }
-
         Account account = accountService.processNewAccount(signUpForm);
         accountService.login(account);
         return "redirect:/";

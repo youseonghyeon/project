@@ -36,6 +36,7 @@ public class StudyController {
         webDataBinder.addValidators(studyFormValidator);
     }
 
+    /** 스터디 개설 폼/생성 */
     @GetMapping("/new-study")
     public String newStudyForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
@@ -44,7 +45,10 @@ public class StudyController {
     }
 
     @PostMapping("/new-study")
-    public String newStudySubmit(@CurrentAccount Account account, @Valid StudyForm studyForm, Errors errors, Model model) {
+    public String newStudySubmit(
+            @CurrentAccount Account account,
+            @Valid StudyForm studyForm,
+            Errors errors, Model model) {
         if (errors.hasErrors()) {
             model.addAttribute(account);
             return "study/form";
@@ -54,17 +58,19 @@ public class StudyController {
         return "redirect:/study/" + URLEncoder.encode(newStudy.getPath(), StandardCharsets.UTF_8);
     }
 
+    /** 스터디 폼 */
     @GetMapping("/study/{path}")
     public String viewStudy(@CurrentAccount Account account, @PathVariable String path, Model model) {
         model.addAttribute(account);
-        model.addAttribute(studyRepository.findByPath(path));
+        model.addAttribute("study", studyRepository.findByPath(path));
         return "study/view";
     }
 
+    /** 스터디 회원 조회 */
     @GetMapping("/study/{path}/members")
     public String viewStudyMembers(@CurrentAccount Account account, @PathVariable String path, Model model) {
         model.addAttribute(account);
-        model.addAttribute(studyRepository.findByPath(path));
+        model.addAttribute("study", studyRepository.findByPath(path));
         return "study/members";
     }
 

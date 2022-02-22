@@ -1,6 +1,7 @@
-package com.project.zone;
+package com.project.zone.service;
 
 import com.project.domain.Zone;
+import com.project.zone.repository.ZoneRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;

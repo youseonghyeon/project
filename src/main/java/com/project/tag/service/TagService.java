@@ -1,6 +1,7 @@
-package com.project.tag;
+package com.project.tag.service;
 
 import com.project.domain.Tag;
+import com.project.tag.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

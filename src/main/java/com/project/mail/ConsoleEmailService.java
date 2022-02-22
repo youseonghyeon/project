@@ -17,7 +17,7 @@ import java.io.InputStream;
 public class ConsoleEmailService implements EmailService{
 
     @Override
-    public void sendEmail(EmailMessage emailMessage) {
+    public void send(EmailMessage emailMessage) {
         log.info("sent email: {}", emailMessage.getMessage());
     }
 }
