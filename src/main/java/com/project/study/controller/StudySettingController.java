@@ -18,6 +18,7 @@ import com.project.zone.ZoneService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -272,11 +273,10 @@ public class StudySettingController {
                               @PathVariable String path,
                               Model model) {
         Study study = studyService.getStudyToUpdateStatus(account, path);
-        if (!studyService.isValidRemove(study)) {
-            // TODO 에러 처리 로직 추가
-
+        if (!studyService.isRemovable(study)) {
+            throw new IllegalArgumentException("스터디를 삭제할 수 없습니다.");
         }
-        // TODO 삭제 로직 추가
+        studyService.removeStudy(study);
         return "redirect:/";
     }
 }

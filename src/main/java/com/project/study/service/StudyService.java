@@ -133,7 +133,6 @@ public class StudyService {
     }
 
     public void updateStudyPath(Study study, String newPath) {
-
         study.setPath(newPath);
     }
 
@@ -152,8 +151,11 @@ public class StudyService {
         return !studyRepository.existsByTitle(newTitle);
     }
 
-    public boolean isValidRemove(Study study) {
-        // TODO 현재 스터디 상태가 삭제 가능한 상태인지 검증하는 로직
-        return false;
+    public boolean isRemovable(Study study) {
+        return study.isRemovable();
+    }
+
+    public void removeStudy(Study study) {
+        studyRepository.delete(study);
     }
 }
