@@ -29,14 +29,21 @@ public class StudyService {
     }
 
     public Study getStudyToUpdateTag(Account account, String path) {
-        Study study = studyRepository.findAccountWithTagsByPath(path);
+        Study study = studyRepository.findStudyWithTagsByPath(path);
         checkIfExistingStudy(path, study);
         checkIfManager(account, study);
         return study;
     }
 
     public Study getStudyToUpdateZone(Account account, String path) {
-        Study study = studyRepository.findAccountWithZonesByPath(path);
+        Study study = studyRepository.findStudyWithZonesByPath(path);
+        checkIfExistingStudy(path, study);
+        checkIfManager(account, study);
+        return study;
+    }
+
+    public Study getStudyToUpdateStatus(Account account, String path) {
+        Study study = studyRepository.findStudyWithStatusByPath(path);
         checkIfExistingStudy(path, study);
         checkIfManager(account, study);
         return study;
@@ -47,10 +54,11 @@ public class StudyService {
             throw new AccessDeniedException("해당 기능을 사용할 수 없습니다.");
         }
     }
+
     private void checkIfExistingStudy(String path, Study study) {
-       if (study == null) {
-           throw new IllegalArgumentException(path + "에 해당하는 스터디가 없습니다.");
-       }
+        if (study == null) {
+            throw new IllegalArgumentException(path + "에 해당하는 스터디가 없습니다.");
+        }
     }
 
     public Study getStudyToUpdate(Account account, String path) {
@@ -106,5 +114,46 @@ public class StudyService {
 
     public void removeZone(Study study, Zone zone) {
         study.getZones().remove(zone);
+    }
+
+    public void publish(Study study) {
+        study.publish();
+    }
+
+    public void close(Study study) {
+        study.close();
+    }
+
+    public void startRecruit(Study study) {
+        study.startRecruit();
+    }
+
+    public void stopRecruit(Study study) {
+        study.stopRecruit();
+    }
+
+    public void updateStudyPath(Study study, String newPath) {
+
+        study.setPath(newPath);
+    }
+
+    public void updateStudyTitle(Study study, String newTitle) {
+        if (studyRepository.existsByTitle(newTitle)) {
+            throw new IllegalArgumentException(newTitle + "은(는) 이미 사용중입니다.");
+        }
+        study.setTitle(newTitle);
+    }
+
+    public boolean isValidPath(String newPath) {
+        return !studyRepository.existsByPath(newPath);
+    }
+
+    public boolean isValidTitle(String newTitle) {
+        return !studyRepository.existsByTitle(newTitle);
+    }
+
+    public boolean isValidRemove(Study study) {
+        // TODO 현재 스터디 상태가 삭제 가능한 상태인지 검증하는 로직
+        return false;
     }
 }
