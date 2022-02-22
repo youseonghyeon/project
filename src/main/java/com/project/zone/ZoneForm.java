@@ -1,4 +1,4 @@
-package com.project.settings.form;
+package com.project.zone;
 
 import com.project.domain.Zone;
 import lombok.Data;

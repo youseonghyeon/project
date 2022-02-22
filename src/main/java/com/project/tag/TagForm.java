@@ -1,4 +1,4 @@
-package com.project.settings.form;
+package com.project.tag;
 
 import lombok.Data;
 

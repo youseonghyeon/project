@@ -13,6 +13,12 @@ import java.util.Set;
         @NamedAttributeNode("zones"),
         @NamedAttributeNode("managers"),
         @NamedAttributeNode("members")})
+@NamedEntityGraph(name = "Study.withTagsAndManagers", attributeNodes = {
+        @NamedAttributeNode("tags"),
+        @NamedAttributeNode("managers")})
+@NamedEntityGraph(name = "Study.withZonesAndManagers", attributeNodes = {
+        @NamedAttributeNode("zones"),
+        @NamedAttributeNode("managers")})
 @Entity
 @Getter
 @Setter
@@ -84,6 +90,9 @@ public class Study {
 
     public boolean isManager(UserAccount userAccount) {
         return this.managers.contains(userAccount.getAccount());
+    }
+    public boolean isManagerOf(Account account) {
+        return this.managers.contains(account);
     }
 
     public void addMemeber(Account account) {
