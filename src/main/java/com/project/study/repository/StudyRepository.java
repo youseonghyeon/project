@@ -1,5 +1,6 @@
 package com.project.study.repository;
 
+import com.project.domain.Account;
 import com.project.domain.Study;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,5 +26,7 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
     @EntityGraph(value = "Study.withMembersAndManagers", type = EntityGraph.EntityGraphType.FETCH)
     Study findStudyWithMemberByPath(String path);
 
+    @EntityGraph(value = "Study.withStudy", type = EntityGraph.EntityGraphType.FETCH)
     boolean existsByTitle(String newTitle);
+
 }

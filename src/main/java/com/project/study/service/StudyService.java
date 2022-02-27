@@ -173,4 +173,6 @@ public class StudyService {
         }
         study.getMembers().remove(account);
     }
+
+
 }

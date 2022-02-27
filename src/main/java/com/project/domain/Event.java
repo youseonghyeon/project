@@ -1,30 +1,24 @@
 package com.project.domain;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.project.account.util.UserAccount;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
-@EqualsAndHashCode(of = "id")
-@NoArgsConstructor
+@Getter @Setter @EqualsAndHashCode(of = "id")
 public class Event {
 
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Study study;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Account createBy;
+    @ManyToOne
+    private Account createdBy;
 
     @Column(nullable = false)
     private String title;
@@ -44,7 +38,7 @@ public class Event {
     @Column(nullable = false)
     private LocalDateTime endDateTime;
 
-    @Column(nullable = true)
+    @Column
     private Integer limitOfEnrollments;
 
     @OneToMany(mappedBy = "event")
@@ -52,4 +46,48 @@ public class Event {
 
     @Enumerated(EnumType.STRING)
     private EventType eventType;
+
+    public boolean isEnrollableFor(UserAccount userAccount) {
+        return isNotClosed() && !isAlreadyEnrolled(userAccount);
+    }
+
+    public boolean isDisenrollableFor(UserAccount userAccount) {
+        return isNotClosed() && isAlreadyEnrolled(userAccount);
+    }
+
+    private boolean isNotClosed() {
+        return this.endEnrollmentDateTime.isAfter(LocalDateTime.now());
+    }
+
+    public boolean isAttended(UserAccount userAccount) {
+        Account account = userAccount.getAccount();
+        for (Enrollment e : this.enrollments) {
+            if (e.getAccount().equals(account) && e.isAttended()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isAlreadyEnrolled(UserAccount userAccount) {
+        Account account = userAccount.getAccount();
+        for (Enrollment e : this.enrollments) {
+            if (e.getAccount().equals(account)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isAcceptable(Enrollment enrollment) {
+        // TODO 신청 수락
+        return true;
+    }
+
+    public boolean isRejectable(Enrollment enrollment) {
+        // TODO 신청 취소
+        return true;
+    }
+
 }

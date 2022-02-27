@@ -24,5 +24,6 @@ public class Enrollment {
 
     private boolean accepted;
 
-    private boolean attend;
+    private boolean attended;
+
 }

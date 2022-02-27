@@ -96,7 +96,7 @@ public class Study {
     }
 
     public boolean isMemberOf(Account account) {
-       return this.members.contains(account);
+        return this.members.contains(account);
     }
 
     public boolean isManager(UserAccount userAccount) {
