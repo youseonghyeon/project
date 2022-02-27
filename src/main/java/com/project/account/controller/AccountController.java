@@ -1,5 +1,6 @@
 package com.project.account.controller;
 
+import com.project.account.form.LoginForm;
 import com.project.account.repository.AccountRepository;
 import com.project.account.service.AccountService;
 import com.project.account.util.CurrentAccount;
@@ -7,6 +8,7 @@ import com.project.account.validator.SignUpFormValidator;
 import com.project.domain.Account;
 import com.project.account.form.SignUpForm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -30,9 +32,17 @@ public class AccountController {
     }
 
     @GetMapping("/login")
-    public String login() {
+    public String loginForm() {
         return "login";
     }
+
+//    @PostMapping("/login")
+//    public String login(LoginForm loginForm) {
+//        UserDetails userDetails = accountService.loadUserByUsername(loginForm.getUsername());
+//        String password = userDetails.getPassword();
+//        System.out.println("password = " + password);
+//        return null;
+//    }
 
     @GetMapping("/sign-up")
     public String signUpForm(Model model) {
