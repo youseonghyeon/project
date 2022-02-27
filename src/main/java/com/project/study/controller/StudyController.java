@@ -79,7 +79,7 @@ public class StudyController {
         Study study = studyRepository.findStudyWithMemberByPath(path);
         studyService.addMember(study, account);
 
-        return "redirect:/study/" + URLEncoder.encode(study.getPath(), StandardCharsets.UTF_8);
+        return "redirect:/study/" + study.getEncodedPath();
     }
 
     @GetMapping("/study/{path}/leave")
@@ -87,7 +87,7 @@ public class StudyController {
         Study study = studyRepository.findStudyWithMemberByPath(path);
         studyService.removeMember(study, account);
 
-        return "redirect:/study/" + URLEncoder.encode(study.getPath(), StandardCharsets.UTF_8);
+        return "redirect:/study/" + study.getEncodedPath();
     }
 
 }
