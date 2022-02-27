@@ -16,6 +16,17 @@ spring:
         use_sql_comments: true
         jdbc:
           batch_size: 100
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: epfzja1234@gmail.com
+    password: zehpnoaaalfvvedy
+    properties:
+      mail:
+        smtp:
+          auto: true
+          timeout: 5000
+          starttls.enable: true
 
 
 

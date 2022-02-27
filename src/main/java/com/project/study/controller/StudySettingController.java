@@ -217,7 +217,7 @@ public class StudySettingController {
                              RedirectAttributes attributes) {
         Study study = studyService.getStudyToUpdateStatus(account, path);
         studyService.close(study);
-        attributes.addFlashAttribute("message", "스터디를 공개했습니다.");
+        attributes.addFlashAttribute("message", "스터디를 비공개했습니다.");
         return "redirect:/study/" + getPath(path) + "/settings/study";
     }
 

@@ -1,5 +1,6 @@
 package com.project.study.service;
 
+import com.project.account.util.UserAccount;
 import com.project.domain.Account;
 import com.project.domain.Study;
 import com.project.domain.Tag;
@@ -157,5 +158,19 @@ public class StudyService {
 
     public void removeStudy(Study study) {
         studyRepository.delete(study);
+    }
+
+    public void addMember(Study study, Account account) {
+        if (study.isMemberOf(account) || study.isManagerOf(account)) {
+            throw new IllegalArgumentException("이미 등록된 스터디입니다.");
+        }
+        study.getMembers().add(account);
+    }
+
+    public void removeMember(Study study, Account account) {
+        if (!study.isMemberOf(account)) {
+            throw new IllegalArgumentException("등록되지 않은 회원입니다.");
+        }
+        study.getMembers().remove(account);
     }
 }

@@ -18,7 +18,8 @@ public class ConsoleEmailService implements EmailService{
 
     @Override
     public void send(EmailMessage emailMessage) {
-        log.info("sent email: {}", emailMessage.getMessage());
+//        log.info("sent email: {}", emailMessage.getMessage());\
+        log.info("가입 인증 이메일 전송");
     }
 }
 

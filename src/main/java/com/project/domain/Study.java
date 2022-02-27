@@ -21,6 +21,9 @@ import java.util.Set;
         @NamedAttributeNode("managers")})
 @NamedEntityGraph(name = "Study.withStatusAndManagers", attributeNodes = {
         @NamedAttributeNode("managers")})
+@NamedEntityGraph(name = "Study.withMembersAndManagers", attributeNodes = {
+        @NamedAttributeNode("members"),
+        @NamedAttributeNode("managers")})
 @Entity
 @Getter
 @Setter
@@ -88,6 +91,10 @@ public class Study {
 
     public boolean isMember(UserAccount userAccount) {
         return this.members.contains(userAccount.getAccount());
+    }
+
+    public boolean isMemberOf(Account account) {
+       return this.members.contains(account);
     }
 
     public boolean isManager(UserAccount userAccount) {
