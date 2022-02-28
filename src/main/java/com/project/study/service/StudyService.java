@@ -80,6 +80,10 @@ public class StudyService {
         return study;
     }
 
+    public Study getStudyToEnroll(String path) {
+        return studyRepository.findStudyOnlyByPath(path);
+    }
+
     public void updateStudyDescription(Study study, StudyDescriptionForm studyDescriptionForm) {
         modelMapper.map(studyDescriptionForm, study);
     }
@@ -173,6 +177,7 @@ public class StudyService {
         }
         study.getMembers().remove(account);
     }
+
 
 
 }

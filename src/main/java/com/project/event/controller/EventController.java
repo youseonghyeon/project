@@ -2,11 +2,13 @@ package com.project.event.controller;
 
 import com.project.account.util.CurrentAccount;
 import com.project.domain.Account;
+import com.project.domain.Enrollment;
 import com.project.domain.Event;
 import com.project.domain.Study;
 import com.project.event.form.EventForm;
 import com.project.event.form.EventUpdateForm;
 import com.project.event.repository.EventRepository;
+import com.project.event.service.EnrollmentService;
 import com.project.event.service.EventService;
 import com.project.event.validator.EventValidator;
 import com.project.study.service.StudyService;
@@ -33,6 +35,7 @@ public class EventController {
     private final EventService eventService;
     private final ModelMapper modelMapper;
     private final EventValidator eventFormValidator;
+    private final EnrollmentService enrollmentService;
 
 
     @InitBinder("eventForm")
@@ -124,6 +127,27 @@ public class EventController {
         return "redirect:/study/" + study.getEncodedPath() + "/events/" + event.getId();
     }
 
+    @DeleteMapping("/events/{id}")
+    public String cancelEvent(@CurrentAccount Account account, @PathVariable String path, @PathVariable Long id) {
+        Study study = studyService.getStudyToUpdateStatus(account, path);
+        eventService.deleteEvent(eventRepository.findById(id).orElseThrow());
+        return "redirect:/study/" + study.getEncodedPath() + "/events";
+    }
 
+    @PostMapping("/events/{id}/enroll")
+    public String enrollForm(@CurrentAccount Account account, @PathVariable String path, @PathVariable Long id) {
+        Study study = studyService.getStudyToEnroll(path);
+        Event event = eventRepository.findById(id).orElseThrow();
+        enrollmentService.enroll(event, account);
 
+        return "redirect:/study/" + study.getEncodedPath() + "/events/" + id;
+
+    }
+
+    @PostMapping("/events/{id}/disenroll")
+    public String cancelEnrollment(@CurrentAccount Account account, @PathVariable String path, @PathVariable Long id) {
+        Study study = studyService.getStudyToEnroll(path);
+        eventService.cancelEnrollment(eventRepository.findById(id).orElseThrow(), account);
+        return "redirect:/study/" + study.getEncodedPath() + "/events/" + id;
+    }
 }

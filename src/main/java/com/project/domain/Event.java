@@ -12,10 +12,13 @@ import java.util.List;
         attributeNodes = @NamedAttributeNode("enrollments")
 )
 @Entity
-@Getter @Setter @EqualsAndHashCode(of = "id")
+@Getter
+@Setter
+@EqualsAndHashCode(of = "id")
 public class Event {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
 
     @ManyToOne
@@ -86,5 +89,29 @@ public class Event {
             }
         }
         return false;
+    }
+
+    public int joinableCnt() {
+        int cnt = 0;
+        for (Enrollment e : enrollments) {
+            if (e.isAccepted()) {
+                cnt++;
+            }
+        }
+        return this.limitOfEnrollments - cnt;
+    }
+
+    public boolean canAccept(Enrollment enrollment) {
+        return this.eventType == EventType.CONFIRMATIVE
+                && this.enrollments.contains(enrollment)
+                && !enrollment.isAttended()
+                && !enrollment.isAccepted();
+    }
+
+    public boolean canReject(Enrollment enrollment) {
+        return this.eventType == EventType.CONFIRMATIVE
+                && this.enrollments.contains(enrollment)
+                && !enrollment.isAttended()
+                && enrollment.isAccepted();
     }
 }

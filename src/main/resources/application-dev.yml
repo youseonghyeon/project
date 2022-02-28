@@ -17,5 +17,10 @@ spring:
           auto: true
           timeout: 5000
           starttls.enable: true
+
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
 app:
   host: http://localhost:8080/
