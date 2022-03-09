@@ -1,6 +1,8 @@
 package com.project.domain;
 
-import com.project.account.util.UserAccount;
+import com.project.modules.account.util.UserAccount;
+import com.project.modules.domain.Account;
+import com.project.modules.domain.Study;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

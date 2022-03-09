@@ -1,23 +1,8 @@
 spring:
-  profiles:
-    active: test
-  datasource:
-    url: jdbc:postgresql://localhost:5433/testdb
-    username: testuser
-    password: testpass
   jpa:
     hibernate:
-      ddl-auto: create-drop
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: epfzja1234@gmail.com
-    password: zehpnoaaalfvvedy
-    properties:
-      mail:
-        smtp:
-          auto: true
-          timeout: 5000
-          starttls.enable: true
-app:
-  host: http://localhost:8080/
+      ddl-auto: update
+
+  datasource:
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    url: jdbc:tc:postgresql:///studytest

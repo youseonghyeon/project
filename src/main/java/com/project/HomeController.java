@@ -1,7 +1,7 @@
 package com.project;
 
-import com.project.account.util.CurrentAccount;
-import com.project.domain.Account;
+import com.project.modules.account.util.CurrentAccount;
+import com.project.modules.domain.Account;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

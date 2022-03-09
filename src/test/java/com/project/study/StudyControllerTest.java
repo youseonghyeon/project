@@ -1,12 +1,11 @@
 package com.project.study;
 
 import com.project.WithAccount;
-import com.project.account.repository.AccountRepository;
-import com.project.domain.Account;
-import com.project.domain.Study;
-import com.project.study.repository.StudyRepository;
-import com.project.study.service.StudyService;
-import lombok.RequiredArgsConstructor;
+import com.project.modules.account.repository.AccountRepository;
+import com.project.modules.domain.Account;
+import com.project.modules.domain.Study;
+import com.project.modules.study.repository.StudyRepository;
+import com.project.modules.study.service.StudyService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
-@RequiredArgsConstructor
 class StudyControllerTest {
 
     @Autowired

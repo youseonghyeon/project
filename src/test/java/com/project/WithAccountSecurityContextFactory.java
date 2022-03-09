@@ -1,7 +1,7 @@
 package com.project;
 
-import com.project.account.service.AccountService;
-import com.project.account.form.SignUpForm;
+import com.project.modules.account.service.AccountService;
+import com.project.modules.account.form.SignUpForm;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;

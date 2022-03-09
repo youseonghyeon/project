@@ -2,20 +2,19 @@ package com.project.study;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.WithAccount;
-import com.project.account.repository.AccountRepository;
-import com.project.account.service.AccountService;
-import com.project.domain.Account;
-import com.project.domain.Study;
-import com.project.domain.Tag;
-import com.project.domain.Zone;
-import com.project.study.form.StudyForm;
-import com.project.study.repository.StudyRepository;
-import com.project.study.service.StudyService;
-import com.project.tag.form.TagForm;
-import com.project.tag.repository.TagRepository;
-import com.project.zone.form.ZoneForm;
-import com.project.zone.repository.ZoneRepository;
-import lombok.RequiredArgsConstructor;
+import com.project.modules.account.repository.AccountRepository;
+import com.project.modules.account.service.AccountService;
+import com.project.modules.domain.Account;
+import com.project.modules.domain.Study;
+import com.project.modules.domain.Tag;
+import com.project.modules.domain.Zone;
+import com.project.modules.study.form.StudyForm;
+import com.project.modules.study.repository.StudyRepository;
+import com.project.modules.study.service.StudyService;
+import com.project.modules.tag.form.TagForm;
+import com.project.modules.tag.repository.TagRepository;
+import com.project.modules.zone.form.ZoneForm;
+import com.project.modules.zone.repository.ZoneRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -41,7 +40,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
-@RequiredArgsConstructor
 class StudySettingControllerTest {
 
     @Autowired

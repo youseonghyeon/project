@@ -1,6 +1,6 @@
 package com.project;
 
-import com.project.settings.form.PasswordForm;
+import com.project.modules.settings.form.PasswordForm;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
