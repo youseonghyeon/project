@@ -4,10 +4,12 @@ import com.project.modules.domain.Account;
 import com.project.modules.domain.Study;
 import com.project.modules.domain.Tag;
 import com.project.modules.domain.Zone;
+import com.project.modules.study.event.StudyCreateEvent;
 import com.project.modules.study.repository.StudyRepository;
 import com.project.modules.study.form.StudyDescriptionForm;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,10 +23,13 @@ public class StudyService {
 
     private final StudyRepository studyRepository;
     private final ModelMapper modelMapper;
+    private final ApplicationEventPublisher eventPublisher;
 
     public Study createNewStudy(Study study, Account account) {
         Study newStudy = studyRepository.save(study);
         newStudy.addManager(account);
+        eventPublisher.publishEvent(new StudyCreateEvent(newStudy));
+        // TODO 알림을 보내면 됨
         return newStudy;
     }
 
