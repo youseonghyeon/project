@@ -4,7 +4,7 @@ import com.project.modules.domain.Account;
 import com.project.modules.domain.Study;
 import com.project.modules.domain.Tag;
 import com.project.modules.domain.Zone;
-import com.project.modules.study.event.StudyCreateEvent;
+import com.project.modules.study.event.StudyCreatedEvent;
 import com.project.modules.study.repository.StudyRepository;
 import com.project.modules.study.form.StudyDescriptionForm;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class StudyService {
     public Study createNewStudy(Study study, Account account) {
         Study newStudy = studyRepository.save(study);
         newStudy.addManager(account);
-        eventPublisher.publishEvent(new StudyCreateEvent(newStudy));
+        eventPublisher.publishEvent(new StudyCreatedEvent(newStudy));
         // TODO 알림을 보내면 됨
         return newStudy;
     }
@@ -127,6 +127,7 @@ public class StudyService {
 
     public void publish(Study study) {
         study.publish();
+        this.eventPublisher.publishEvent(new StudyCreatedEvent(study));
     }
 
     public void close(Study study) {
